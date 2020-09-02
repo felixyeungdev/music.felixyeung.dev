@@ -51,6 +51,8 @@ class Player {
         volumeInput.min = 0;
         volumeInput.max = PRECISION;
         volumeInput.type = "range";
+        volumeInput.value = Math.floor(getAudioVolume() * PRECISION);
+
         let volumeUpIcon = document.createElement("i");
         volumeUpIcon.classList.add("fas", "fa-volume-up", "volume-up");
         let volumeMutedIcon = document.createElement("i");
