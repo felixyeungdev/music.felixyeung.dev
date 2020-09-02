@@ -129,11 +129,7 @@ class Player {
         this.audio.addEventListener("volumechange", (e) =>
             saveAudioVolume(this.audio.volume)
         );
-        try {
-            this._initVisualiser();
-        } catch (error) {
-            console.log(error);
-        }
+        this._visualiserInitialised = false;
     }
 
     _loadLyrics(lyrics) {
@@ -236,11 +232,12 @@ class Player {
         }, 10);
         this.audio.addEventListener("canplaythrough", (e) => this.audio.play());
         // this.audio.addEventListener("canplay", (e) => this.audio.play());
+        if (!this._visualiserInitialised) this._initVisualiser();
     }
     stop() {
         if (this._looper) {
-            clearInterval(this._looper);
             this.audio.pause();
+            clearInterval(this._looper);
         }
     }
     enableDebug() {
