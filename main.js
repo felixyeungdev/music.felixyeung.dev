@@ -15,6 +15,7 @@ function createSongItemTemplate({ song = new Song(), i }) {
     playButton.classList.add("song-play");
     playButton.textContent = "Play";
     playButton.addEventListener("click", (e) => player.play(song));
+    songElement.addEventListener("click", (e) => playButton.click());
 
     songElement.append(songIndex, songTitle, playButton);
 

@@ -19,22 +19,116 @@ class Player {
         this._init();
     }
 
+    _createController() {
+        const PRECISION = 50;
+        let controller = document.createElement("div");
+        controller.classList.add("player-controls");
+
+        let playPause = document.createElement("div");
+        playPause.classList.add("player-play_pause");
+        playPause.classList.add("paused");
+        let playButton = document.createElement("button");
+        playButton.classList.add("play");
+        playButton.innerHTML = `<i class="fas fa-play"></i>`;
+        let pauseButton = document.createElement("button");
+        pauseButton.classList.add("pause");
+        pauseButton.innerHTML = `<i class="fas fa-pause"></i>`;
+
+        playPause.append(playButton, pauseButton);
+
+        let seek = document.createElement("div");
+        seek.classList.add("player-seek");
+        let seekInput = document.createElement("input");
+        seekInput.type = "range";
+        seekInput.value = 0;
+        seekInput.min = 0;
+        seekInput.max = PRECISION;
+        seek.append(seekInput);
+
+        let volume = document.createElement("div");
+        volume.classList.add("player-volume");
+        let volumeInput = document.createElement("input");
+        volumeInput.min = 0;
+        volumeInput.max = PRECISION;
+        volumeInput.type = "range";
+        let volumeUpIcon = document.createElement("i");
+        volumeUpIcon.classList.add("fas", "fa-volume-up", "volume-up");
+        let volumeMutedIcon = document.createElement("i");
+        volumeMutedIcon.classList.add("fas", "fa-volume-mute", "volume-mute");
+        volume.append(volumeInput, volumeUpIcon, volumeMutedIcon);
+
+        controller.append(playPause, seek, volume);
+
+        // Logic
+        playButton.addEventListener("click", (e) => {
+            playPause.classList.add("playing");
+            playPause.classList.remove("paused");
+            this.audio.play();
+        });
+        pauseButton.addEventListener("click", (e) => {
+            playPause.classList.remove("playing");
+            playPause.classList.add("paused");
+            this.audio.pause();
+        });
+        seekInput.addEventListener("input", (e) => {
+            this.audio.currentTime = seekInput.value / PRECISION;
+        });
+        this.audio.addEventListener("volumechange", (e) => {
+            volumeInput.value = Math.floor(this.audio.volume * PRECISION);
+            if (volumeInput.value == 0) {
+                volume.classList.add("zero");
+            } else {
+                volume.classList.remove("zero");
+            }
+        });
+        this.audio.addEventListener("pause", (e) => {
+            pauseButton.click();
+        });
+        this.audio.addEventListener("play", (e) => {
+            playButton.click();
+        });
+        this.audio.addEventListener("durationchange", (e) => {
+            seekInput.max = Math.floor(this.audio.duration * PRECISION);
+        });
+        this.audio.addEventListener("timeupdate", (e) => {
+            seekInput.value = this.audio.currentTime * PRECISION;
+        });
+        volumeInput.addEventListener("input", (e) => {
+            this.audio.volume = volumeInput.value / PRECISION;
+        });
+
+        return controller;
+    }
+
     _init() {
+        this.audio = new Audio();
         this._title = document.createElement("div");
         this._title.classList.add("player-title");
         this._lyrics = document.createElement("div");
         this._lyrics.classList.add("player-lyrics");
-        this._controls = document.createElement("div");
-        this._controls.classList.add("player-controls");
+        this._controls = this._createController();
 
         this.box.classList.add("player");
         this.box.append(this._title, this._lyrics, this._controls);
+        this.box.addEventListener("dblclick", (e) => {
+            if (
+                document.fullScreen ||
+                document.mozFullScreen ||
+                document.webkitIsFullScreen
+            ) {
+                document.exitFullscreen();
+            } else {
+                this.box.requestFullscreen();
+            }
+        });
 
         this._title.textContent = "No song selected";
 
-        this.audio = new Audio();
-        this.audio.controls = true;
-        this._controls.append(this.audio);
+        // this.audio.controls = true;
+        this.audio.volume = getAudioVolume();
+        this.audio.addEventListener("volumechange", (e) =>
+            saveAudioVolume(this.audio.volume)
+        );
     }
 
     _loadLyrics(lyrics) {
@@ -62,8 +156,6 @@ class Player {
                 totalScroll += e.clientHeight;
             }
         });
-
-        console.log({ totalScroll });
 
         this._lyrics.scrollTo({
             top: totalScroll,
@@ -113,4 +205,12 @@ class Player {
             console.log(this.debugTimings);
         });
     }
+}
+
+function saveAudioVolume(volume = 1.0) {
+    window.localStorage.setItem("player-volume", volume);
+}
+
+function getAudioVolume() {
+    return parseFloat(window.localStorage.getItem("player-volume") || 1);
 }
