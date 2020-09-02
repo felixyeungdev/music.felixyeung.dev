@@ -2,6 +2,8 @@ const songs = [
     new Song({
         title: "Blah Blah Blah Instrumental",
         source: "/assets/audio/Blah Blah Blah Instrumental.mp3",
+        tempo: 128,
+        beat: 4,
         lyrics: [
             "Ok",
             "Ok",
@@ -122,6 +124,8 @@ const songs = [
     new Song({
         title: "梁惠王上",
         source: "/assets/audio/梁惠王上.mp3",
+        tempo: 100,
+        beat: 4,
         lyrics: [
             "不違農時，",
             "穀不可勝食也；",
@@ -155,6 +159,9 @@ const songs = [
     new Song({
         title: "聲聲慢 秋情 李清照",
         source: "/assets/audio/聲聲慢-秋情-李清照.mp3",
+        tempo: 111,
+        beatsDelay: 15,
+        beat: 4,
         lyrics: [
             "尋尋覓覓，",
             "冷冷清清，",
@@ -203,6 +210,8 @@ const songs = [
     new Song({
         title: "岳陽樓記 范仲淹",
         source: "/assets/audio/岳陽樓記-范仲淹.mp3",
+        tempo: 120,
+        beat: 4,
         lyrics: [
             "岳陽樓記",
             "范仲淹",
@@ -377,6 +386,8 @@ const songs = [
     new Song({
         title: "始得西山宴遊記 柳宗元",
         source: "/assets/audio/始得西山宴遊記-柳宗元.mp3",
+        tempo: 120,
+        beat: 4,
         lyrics: [
             "始得西山宴遊記",
             "柳宗元",

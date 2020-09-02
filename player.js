@@ -168,9 +168,6 @@ class Player {
             top: totalScroll,
             behavior: "smooth",
         });
-        this.box.classList.add("base");
-
-        setTimeout((e) => this.box.classList.remove("base"), 50);
     }
 
     _initVisualiser() {
@@ -221,7 +218,7 @@ class Player {
         this._loadLyrics(song.lyrics);
         var waiting = false;
         this._looper = setInterval(async () => {
-            if (waiting || player.audio.paused) return;
+            if (waiting || this.audio.paused) return;
             waiting = true;
             for (var i = 0; i < song.timings.length; i++) {
                 const e = song.timings[i];
@@ -231,7 +228,6 @@ class Player {
                     break;
                 }
             }
-
             var tillNext = song.timings[i + 1]
                 ? song.timings[i + 1] - this.audio.currentTime * 1000 - 100
                 : 10;
@@ -239,6 +235,28 @@ class Player {
             await sleep(tillNext);
             waiting = false;
         }, 10);
+
+        if (song.tempo) {
+            var beatsWaiting = false;
+            var eachBeatLast = (1 / (song.tempo / 60)) * 1000;
+            this._beatsLooper = setInterval(async () => {
+                if (beatsWaiting || this.audio.paused) return;
+
+                beatsWaiting = true;
+                let msUntilNextBeat =
+                    eachBeatLast -
+                    (Math.floor(
+                        (this.audio.currentTime - song.beatsDelay) * 1000
+                    ) %
+                        eachBeatLast) -
+                    50;
+                await sleep(msUntilNextBeat);
+                this.box.classList.add("base");
+                setTimeout((e) => this.box.classList.remove("base"), 50);
+                beatsWaiting = false;
+            }, 0);
+        }
+
         this.audio.addEventListener("canplaythrough", (e) => this.audio.play());
         // this.audio.addEventListener("canplay", (e) => this.audio.play());
         if (!this._visualiserInitialised) this._initVisualiser();
@@ -247,6 +265,9 @@ class Player {
         if (this._looper) {
             this.audio.pause();
             clearInterval(this._looper);
+        }
+        if (this._beatsLooper) {
+            clearInterval(this._beatsLooper);
         }
     }
     enableDebug() {
