@@ -47,6 +47,8 @@ body {
   overflow: scroll;
   padding: 0 32px;
   background-color: white;
+  -webkit-transition: background-color 250ms ease;
+  transition: background-color 250ms ease;
 }
 
 .player .player-lyrics .player-lyrics-line {
@@ -237,6 +239,12 @@ body {
     background-color: #f9a825;
     border-radius: 0;
   }
+}
+
+.player.base .player-lyrics {
+  -webkit-transition: none;
+  transition: none;
+  background-color: #fde3ba;
 }
 
 .song-list {

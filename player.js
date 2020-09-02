@@ -129,6 +129,7 @@ class Player {
         this.audio.addEventListener("volumechange", (e) =>
             saveAudioVolume(this.audio.volume)
         );
+        this._initVisualiser();
     }
 
     _loadLyrics(lyrics) {
@@ -161,6 +162,46 @@ class Player {
             top: totalScroll,
             behavior: "smooth",
         });
+    }
+
+    _initVisualiser() {
+        let audioContext = new AudioContext();
+        const src = audioContext.createMediaElementSource(this.audio);
+        const analyser = audioContext.createAnalyser();
+        src.connect(analyser);
+        analyser.connect(audioContext.destination);
+        analyser.fftSize = 128;
+        const bufferLength = analyser.frequencyBinCount;
+        const dataArray = new Uint8Array(bufferLength);
+
+        const past = [];
+        var lastIsBase = false;
+        var box = this.box;
+        function renderBase() {
+            requestAnimationFrame(renderBase);
+            var sorted = [...past].sort();
+            var threshold =
+                past.length > 0 ? sorted[sorted.length - 1] * 0.85 : 0;
+            // console.log([...past].sort());
+            const total = dataArray.reduce((acc, curr) => {
+                return (acc += curr);
+            }, 0);
+            past.push(total);
+            if (past.length > 64) {
+                past.shift();
+            }
+            if (total > threshold && total != 0) {
+                if (!lastIsBase) {
+                    box.classList.add("base");
+                }
+            } else {
+                lastIsBase = false;
+                box.classList.remove("base");
+            }
+
+            analyser.getByteFrequencyData(dataArray);
+        }
+        renderBase();
     }
 
     play(song = new Song()) {
@@ -213,4 +254,17 @@ function saveAudioVolume(volume = 1.0) {
 
 function getAudioVolume() {
     return parseFloat(window.localStorage.getItem("player-volume") || 1);
+}
+
+function printVisualiserTest(dataArray = []) {
+    var testDiv = document.querySelector(".test");
+    testDiv.innerHTML = "";
+    for (let i = 0; i < dataArray.length; i++) {
+        const value = dataArray[i];
+        var bar = document.createElement("div");
+        bar.style.backgroundColor = "#000000";
+        bar.style.height = "8px";
+        bar.style.width = `${value / 100}px`;
+        testDiv.append(bar);
+    }
 }
