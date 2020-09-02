@@ -129,7 +129,11 @@ class Player {
         this.audio.addEventListener("volumechange", (e) =>
             saveAudioVolume(this.audio.volume)
         );
-        this._initVisualiser();
+        try {
+            this._initVisualiser();
+        } catch (error) {
+            console.log(error);
+        }
     }
 
     _loadLyrics(lyrics) {
@@ -165,6 +169,7 @@ class Player {
     }
 
     _initVisualiser() {
+        window.AudioContext = window.AudioContext || window.webkitAudioContext;
         let audioContext = new AudioContext();
         const src = audioContext.createMediaElementSource(this.audio);
         const analyser = audioContext.createAnalyser();
