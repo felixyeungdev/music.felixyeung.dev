@@ -97,6 +97,9 @@ class Player {
         });
         volumeInput.addEventListener("input", (e) => {
             this.audio.volume = volumeInput.value / PRECISION;
+            setTimeout((e) => {
+                volumeInput.value = this.audio.volume * PRECISION;
+            });
         });
 
         return controller;
@@ -276,3 +279,28 @@ function printVisualiserTest(dataArray = []) {
         testDiv.append(bar);
     }
 }
+
+function getOS() {
+    var userAgent = window.navigator.userAgent,
+        platform = window.navigator.platform,
+        macosPlatforms = ["Macintosh", "MacIntel", "MacPPC", "Mac68K"],
+        windowsPlatforms = ["Win32", "Win64", "Windows", "WinCE"],
+        iosPlatforms = ["iPhone", "iPad", "iPod"],
+        os = null;
+
+    if (macosPlatforms.indexOf(platform) !== -1) {
+        os = "macos";
+    } else if (iosPlatforms.indexOf(platform) !== -1) {
+        os = "ios";
+    } else if (windowsPlatforms.indexOf(platform) !== -1) {
+        os = "windows";
+    } else if (/Android/.test(userAgent)) {
+        os = "android";
+    } else if (!os && /Linux/.test(platform)) {
+        os = "linux";
+    }
+
+    return os;
+}
+
+const os = getOS();
