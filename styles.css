@@ -201,6 +201,10 @@ body {
   width: 100%;
 }
 
+.player .player-controls .player-volume i {
+  padding-left: 8px;
+}
+
 .player .player-controls .player-volume :last-child {
   display: none;
 }
