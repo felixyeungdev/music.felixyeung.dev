@@ -221,7 +221,7 @@ class Player {
         this._loadLyrics(song.lyrics);
         var waiting = false;
         this._looper = setInterval(async () => {
-            if (waiting) return;
+            if (waiting || player.audio.paused) return;
             waiting = true;
             for (var i = 0; i < song.timings.length; i++) {
                 const e = song.timings[i];
