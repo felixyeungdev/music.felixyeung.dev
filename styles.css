@@ -47,8 +47,8 @@ body {
   overflow: scroll;
   padding: 0 32px;
   background-color: white;
-  -webkit-transition: background-color 250ms ease;
-  transition: background-color 250ms ease;
+  -webkit-transition: background-color 500ms ease;
+  transition: background-color 500ms ease;
 }
 
 .player .player-lyrics .player-lyrics-line {
@@ -242,9 +242,9 @@ body {
 }
 
 .player.base .player-lyrics {
-  -webkit-transition: none;
-  transition: none;
-  background-color: #fde3ba;
+  -webkit-transition: background-color 50ms ease;
+  transition: background-color 50ms ease;
+  background-color: #feedd3;
 }
 
 .song-list {

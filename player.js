@@ -130,6 +130,7 @@ class Player {
             saveAudioVolume(this.audio.volume)
         );
         this._visualiserInitialised = false;
+        this._visualiserInitialised = true; // Disabled it for a very good reason
     }
 
     _loadLyrics(lyrics) {
@@ -162,6 +163,9 @@ class Player {
             top: totalScroll,
             behavior: "smooth",
         });
+        this.box.classList.add("base");
+
+        setTimeout((e) => this.box.classList.remove("base"), 50);
     }
 
     _initVisualiser() {
