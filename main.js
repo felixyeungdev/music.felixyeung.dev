@@ -1,3 +1,7 @@
+window.AudioContext = window.AudioContext || window.webkitAudioContext;
+window.OfflineAudioContext =
+    window.OfflineAudioContext || window.webkitOfflineAudioContext;
+
 let player = new Player({ box: document.querySelector(".player") });
 player.enableDebug();
 function createSongItemTemplate({ song = new Song(), i }) {
@@ -32,3 +36,26 @@ function showSongs() {
     }
 }
 showSongs();
+
+function getPeaks(uri) {
+    return new Promise((resolve, reject) => {
+        try {
+            var pulse = new Pulse({
+                onComplete: function (event, pulse) {
+                    var extrapolatedPeaks = pulse.getExtrapolatedPeaks(
+                        pulse.renderedBuffer,
+                        pulse.significantPeaks,
+                        pulse.beat
+                    );
+                    resolve(extrapolatedPeaks);
+                    // console.log(pulse.beat);
+                    // console.log(extrapolatedPeaks);
+                },
+            });
+
+            pulse.loadBufferFromURI(uri);
+        } catch (error) {
+            reject(error);
+        }
+    });
+}

@@ -211,11 +211,23 @@ class Player {
         renderBase();
     }
 
-    play(song = new Song()) {
+    async play(song = new Song()) {
         this.stop();
-        this.audio.src = song.source;
         this._title.textContent = song.title;
+
+        this._loadLyrics(["Loading..."]);
+
+        if (song.autoBeat)
+            try {
+                await sleep(500);
+                this.beats = await getPeaks(song.source);
+            } catch (error) {
+                console.error(error);
+            }
+
+        this.audio.src = song.source;
         this._loadLyrics(song.lyrics);
+
         var waiting = false;
         this._looper = setInterval(async () => {
             if (waiting || this.audio.paused) return;
@@ -236,25 +248,52 @@ class Player {
             waiting = false;
         }, 10);
 
-        if (song.tempo) {
+        if (song.tempo || this.beats) {
             var beatsWaiting = false;
-            var eachBeatLast = (1 / (song.tempo / 60)) * 1000;
-            this._beatsLooper = setInterval(async () => {
-                if (beatsWaiting || this.audio.paused) return;
+            if (song.autoBeat && this.beats && this.beats.length > 0) {
+                this._beatsLooper = setInterval(async () => {
+                    if (beatsWaiting || this.audio.paused) return;
+                    beatsWaiting = true;
+                    for (var i = 0; i < this.beats.length; i++) {
+                        const e = this.beats[i];
 
-                beatsWaiting = true;
-                let msUntilNextBeat =
-                    eachBeatLast -
-                    (Math.floor(
-                        (this.audio.currentTime - song.beatsDelay) * 1000
-                    ) %
-                        eachBeatLast) -
-                    50;
-                await sleep(msUntilNextBeat);
-                this.box.classList.add("base");
-                setTimeout((e) => this.box.classList.remove("base"), 50);
-                beatsWaiting = false;
-            }, 0);
+                        if (e >= this.audio.currentTime * 1000) {
+                            this.box.classList.add("base");
+                            setTimeout(
+                                (e) => this.box.classList.remove("base"),
+                                50
+                            );
+                            break;
+                        }
+                    }
+                    var tillNext = this.beats[i + 1]
+                        ? this.beats[i + 1] -
+                          this.audio.currentTime * 1000 -
+                          100
+                        : 10;
+
+                    await sleep(tillNext);
+                    beatsWaiting = false;
+                }, 10);
+            } else {
+                var eachBeatLast = (1 / (song.tempo / 60)) * 1000;
+                this._beatsLooper = setInterval(async () => {
+                    if (beatsWaiting || this.audio.paused) return;
+
+                    beatsWaiting = true;
+                    let msUntilNextBeat =
+                        eachBeatLast -
+                        (Math.floor(
+                            (this.audio.currentTime - song.beatsDelay) * 1000
+                        ) %
+                            eachBeatLast) -
+                        50;
+                    await sleep(msUntilNextBeat);
+                    this.box.classList.add("base");
+                    setTimeout((e) => this.box.classList.remove("base"), 50);
+                    beatsWaiting = false;
+                }, 0);
+            }
         }
 
         this.audio.addEventListener("canplaythrough", (e) => this.audio.play());

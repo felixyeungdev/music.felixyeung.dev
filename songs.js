@@ -4,6 +4,7 @@ const songs = [
         source: "/assets/audio/Blah Blah Blah Instrumental.mp3",
         tempo: 128,
         beat: 4,
+        autoBeat: false,
         lyrics: [
             "Ok",
             "Ok",

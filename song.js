@@ -7,7 +7,7 @@ class Song {
         tempo = 0,
         beat = 0,
         beatsDelay = 0,
-        beats = [],
+        autoBeat = true,
     }) {
         if (lyrics.length < timings.length) {
             throw new Error("Number of Lyrics < the number of Timings");
@@ -18,7 +18,7 @@ class Song {
         this.timings = timings;
         this.tempo = tempo;
         this.beat = beat;
-        this.beats = beats;
+        this.autoBeat = autoBeat;
         this.beatsDelay = beatsDelay;
     }
 }
