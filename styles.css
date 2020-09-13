@@ -265,18 +265,22 @@ body {
 
 .player:-webkit-full-screen .player-title {
   border-radius: 0;
+  font-size: 5vh;
 }
 
 .player:-moz-full-screen .player-title {
   border-radius: 0;
+  font-size: 5vh;
 }
 
 .player:-ms-fullscreen .player-title {
   border-radius: 0;
+  font-size: 5vh;
 }
 
 .player:fullscreen .player-title {
   border-radius: 0;
+  font-size: 5vh;
 }
 
 .player:-webkit-full-screen .player-controls {
@@ -325,6 +329,22 @@ body {
 
 .player:fullscreen .player-lyrics .player-lyrics-line {
   font-size: 5vh;
+}
+
+.player:-webkit-full-screen .player-lyrics .current {
+  font-size: 10vh;
+}
+
+.player:-moz-full-screen .player-lyrics .current {
+  font-size: 10vh;
+}
+
+.player:-ms-fullscreen .player-lyrics .current {
+  font-size: 10vh;
+}
+
+.player:fullscreen .player-lyrics .current {
+  font-size: 10vh;
 }
 
 .song-list {

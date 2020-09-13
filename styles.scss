@@ -226,6 +226,7 @@ body {
     border-radius: 0;
     .player-title {
         border-radius: 0;
+        font-size: 5vh;
     }
 
     .player-controls {
@@ -236,6 +237,9 @@ body {
         padding: 5vw;
         .player-lyrics-line {
             font-size: 5vh;
+        }
+        .current {
+            font-size: 10vh;
         }
     }
 }
