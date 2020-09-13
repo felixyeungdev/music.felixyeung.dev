@@ -247,6 +247,86 @@ body {
   background-color: #feedd3;
 }
 
+.player:-webkit-full-screen {
+  border-radius: 0;
+}
+
+.player:-moz-full-screen {
+  border-radius: 0;
+}
+
+.player:-ms-fullscreen {
+  border-radius: 0;
+}
+
+.player:fullscreen {
+  border-radius: 0;
+}
+
+.player:-webkit-full-screen .player-title {
+  border-radius: 0;
+}
+
+.player:-moz-full-screen .player-title {
+  border-radius: 0;
+}
+
+.player:-ms-fullscreen .player-title {
+  border-radius: 0;
+}
+
+.player:fullscreen .player-title {
+  border-radius: 0;
+}
+
+.player:-webkit-full-screen .player-controls {
+  border-radius: 0;
+}
+
+.player:-moz-full-screen .player-controls {
+  border-radius: 0;
+}
+
+.player:-ms-fullscreen .player-controls {
+  border-radius: 0;
+}
+
+.player:fullscreen .player-controls {
+  border-radius: 0;
+}
+
+.player:-webkit-full-screen .player-lyrics {
+  padding: 5vw;
+}
+
+.player:-moz-full-screen .player-lyrics {
+  padding: 5vw;
+}
+
+.player:-ms-fullscreen .player-lyrics {
+  padding: 5vw;
+}
+
+.player:fullscreen .player-lyrics {
+  padding: 5vw;
+}
+
+.player:-webkit-full-screen .player-lyrics .player-lyrics-line {
+  font-size: 5vh;
+}
+
+.player:-moz-full-screen .player-lyrics .player-lyrics-line {
+  font-size: 5vh;
+}
+
+.player:-ms-fullscreen .player-lyrics .player-lyrics-line {
+  font-size: 5vh;
+}
+
+.player:fullscreen .player-lyrics .player-lyrics-line {
+  font-size: 5vh;
+}
+
 .song-list {
   width: calc(500px - 16px * 2);
   max-width: 800px;

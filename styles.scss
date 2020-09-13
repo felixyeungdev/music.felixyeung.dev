@@ -64,6 +64,7 @@ body {
             font-size: 32px;
         }
     }
+
     .player-controls {
         // height: 48px;
         border-radius: 0 0 $border-radius $border-radius;
@@ -217,6 +218,25 @@ body {
     .player-lyrics {
         transition: background-color 50ms ease;
         background-color: lighten($feliOrange, 35%);
+    }
+}
+
+.player:fullscreen {
+    // filter: invert(1) hue-rotate(180deg);
+    border-radius: 0;
+    .player-title {
+        border-radius: 0;
+    }
+
+    .player-controls {
+        border-radius: 0;
+    }
+
+    .player-lyrics {
+        padding: 5vw;
+        .player-lyrics-line {
+            font-size: 5vh;
+        }
     }
 }
 
